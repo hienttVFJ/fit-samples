@@ -38,6 +38,7 @@ import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 const val TAG = "StepCounter"
 
@@ -71,6 +72,9 @@ class MainActivity : AppCompatActivity() {
         // This method sets up our custom logger, which will print all log messages to the device
         // screen, as well as to adb logcat.
         initializeLogging()
+        btnSteps.setOnClickListener {
+            startActivity(Intent(this, StepActivity::class.java))
+        }
 
         checkPermissionsAndRun(FitActionRequestCode.SUBSCRIBE)
     }

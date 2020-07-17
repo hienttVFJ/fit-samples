@@ -13,29 +13,71 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
+
     <TextView
         android:id="@+id/title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/intro_text" />
+
+    <!--    「体重」「体脂肪率」「睡眠時間」「歩数」-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="歩数 - Steps" />
+
+        <Button
+            android:id="@+id/btnWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="体重 - Weight" />
+
+        <Button
+            android:id="@+id/btnBodyFat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="体脂肪率 - Body fat percentage" />
+
+        <Button
+            android:id="@+id/btnTimeSleep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="睡眠時間 - Time of sleeping" />
+
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/title_text_view">
+
         <com.google.android.gms.fit.samples.common.logger.LogView
             android:id="@+id/sample_logview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>
