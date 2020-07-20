@@ -11,13 +11,17 @@ import java.util.concurrent.TimeUnit
  * Created by Tran The Hien on 17,July,2020
  */
 abstract class BaseFitnessActivity : AppCompatActivity() {
-    val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd")
+    companion object {
+        val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd")
+        val DATE_FORMAT_DETAIL = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    fun printValue(dataReadResult: DataReadResponse, textView: TextView, time: Long) {
+    fun printValue(dataReadResult: DataReadResponse, textView: TextView, time: Long, type: String) {
         textView.text = ""
         textView.append("time $time ms \n")
         if (dataReadResult.buckets.size > 0) {
@@ -32,9 +36,29 @@ abstract class BaseFitnessActivity : AppCompatActivity() {
                         }
                     }
                 }
-                textView.append("date $date     steps $steps \n")
+                textView.append("date $date     $type $steps \n")
             }
         }
     }
 
+
+    fun printValueFloat(dataReadResult: DataReadResponse, textView: TextView, time: Long, type: String) {
+        textView.text = ""
+        textView.append("time $time ms \n")
+        if (dataReadResult.buckets.size > 0) {
+            for (bucket in dataReadResult.buckets) {
+                val date: String = DATE_FORMAT.format(bucket.getStartTime(TimeUnit.MILLISECONDS))
+                val dataSets = bucket.dataSets
+                var weight = 0f
+                for (dataSet in dataSets) {
+                    for (dp in dataSet.dataPoints) {
+                        for (field in dp.dataType.fields) {
+                            weight = dp.getValue(field).asFloat()
+                        }
+                    }
+                }
+                textView.append("date $date     $type $weight \n")
+            }
+        }
+    }
 }

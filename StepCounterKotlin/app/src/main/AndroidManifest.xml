@@ -17,9 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StepActivity">
+        <activity android:name=".StepActivity" />
+        <activity android:name=".WeightActivity" />
+        <activity android:name=".BodyFatActivity" />
+        <activity android:name=".SleepActivity" />
 
-        </activity>
+
     </application>
 
 </manifest>

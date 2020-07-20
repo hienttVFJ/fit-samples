@@ -29,12 +29,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.TextViewCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.fit.samples.common.logger.Log
 import com.google.android.gms.fit.samples.common.logger.LogView
 import com.google.android.gms.fit.samples.common.logger.LogWrapper
 import com.google.android.gms.fit.samples.common.logger.MessageOnlyLogFilter
 import com.google.android.gms.fitness.Fitness
-import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
 import com.google.android.material.snackbar.Snackbar
@@ -58,10 +58,12 @@ enum class FitActionRequestCode {
  * authenticate a user with Google Play Services.
  */
 class MainActivity : AppCompatActivity() {
-    private val fitnessOptions = FitnessOptions.builder()
-            .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
-            .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
-            .build()
+//    private val fitnessOptions = FitnessOptions.builder()
+//            .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
+//            .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+//            .addDataType(DataType.TYPE_WEIGHT)
+//            .addDataType(DataType.TYPE_BODY_FAT_PERCENTAGE)
+//            .build()
 
     private val runningQOrLater =
             android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
@@ -75,6 +77,16 @@ class MainActivity : AppCompatActivity() {
         btnSteps.setOnClickListener {
             startActivity(Intent(this, StepActivity::class.java))
         }
+        btnWeight.setOnClickListener {
+            startActivity(Intent(this, WeightActivity::class.java))
+        }
+        btnBodyFat.setOnClickListener {
+            startActivity(Intent(this, BodyFatActivity::class.java))
+        }
+        btnTimeSleep.setOnClickListener {
+            startActivity(Intent(this, SleepActivity::class.java))
+        }
+
 
         checkPermissionsAndRun(FitActionRequestCode.SUBSCRIBE)
     }
@@ -101,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 GoogleSignIn.requestPermissions(
                         this,
                         requestCode.ordinal,
-                        getGoogleAccount(), fitnessOptions)
+                        getGoogleAccount(), *TOTAL_SCOPES)
             }
         }
     }
@@ -145,21 +157,21 @@ class MainActivity : AppCompatActivity() {
         Log.e(TAG, message)
     }
 
-    private fun oAuthPermissionsApproved() = GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions)
+    private fun oAuthPermissionsApproved() = GoogleSignIn.hasPermissions(getGoogleAccount(), *Constant.TOTAL_SCOPES)
 
-    /**
+    /**`
      * Gets a Google account for use in creating the Fitness client. This is achieved by either
      * using the last signed-in account, or if necessary, prompting the user to sign in.
      * `getAccountForExtension` is recommended over `getLastSignedInAccount` as the latter can
      * return `null` if there has been no sign in before.
      */
-    private fun getGoogleAccount() = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
+    private fun getGoogleAccount() = GoogleSignIn.getLastSignedInAccount(this)
 
     /** Records step data by requesting a subscription to background step data.  */
     private fun subscribe() {
         // To create a subscription, invoke the Recording API. As soon as the subscription is
         // active, fitness data will start recording.
-        Fitness.getRecordingClient(this, getGoogleAccount())
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
                 .subscribe(DataType.TYPE_STEP_COUNT_CUMULATIVE)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -175,7 +187,7 @@ class MainActivity : AppCompatActivity() {
      * current timezone.
      */
     private fun readData() {
-        Fitness.getHistoryClient(this, getGoogleAccount())
+        Fitness.getHistoryClient(this, getGoogleAccount()!!)
                 .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
                 .addOnSuccessListener { dataSet ->
                     val total = when {
@@ -312,3 +324,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+val SCOPE_ACTIVITY_READ_WRITE = Fitness.SCOPE_ACTIVITY_READ_WRITE
+val SCOPE_BODY_READ_WRITE = Fitness.SCOPE_BODY_READ_WRITE
+val USER_PROFILE_SCOPE = Scope("https://www.googleapis.com/auth/userinfo.profile")
+val USER_EMAIL_SCOPE = Scope("https://www.googleapis.com/auth/userinfo.email")
+val TOTAL_SCOPES = arrayOf(
+        SCOPE_ACTIVITY_READ_WRITE, SCOPE_BODY_READ_WRITE, USER_PROFILE_SCOPE, USER_EMAIL_SCOPE
+)

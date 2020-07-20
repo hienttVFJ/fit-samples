@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
-import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.request.DataReadRequest
 import kotlinx.android.synthetic.main.activity_step_count.*
@@ -14,28 +13,28 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Tran The Hien on 17,July,2020
  */
-class StepActivity : BaseFitnessActivity() {
+class WeightActivity : BaseFitnessActivity() {
     companion object {
-        const val TAG = "StepActivity"
+        const val TAG = "WeightActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_step_count)
-        tvTitle.text = "歩数 - Steps"
+        tvTitle.text = "体重 - Weight"
         btnMonth.setOnClickListener {
-            getSteps(Type.MONTH)
+            getWeights(Type.MONTH)
         }
         btnThreeMonth.setOnClickListener {
-            getSteps(Type.THREE_MONTH)
+            getWeights(Type.THREE_MONTH)
         }
         btnYear.setOnClickListener {
-            getSteps(Type.YEAR)
+            getWeights(Type.YEAR)
         }
     }
 
 
-    private fun getSteps(type: Type) {
+    private fun getWeights(type: Type) {
         tvResult.text = ""
         val cal = Calendar.getInstance()
         cal.time = Date()
@@ -52,15 +51,8 @@ class StepActivity : BaseFitnessActivity() {
         cal[Calendar.MILLISECOND] = 0
         val startTime = cal.timeInMillis
 
-        val dataSource = DataSource.Builder()
-                .setAppPackageName("com.google.android.gms")
-                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-                .setType(DataSource.TYPE_DERIVED)
-                .setStreamName("estimated_steps")
-                .build()
-
         val dataReadRequest = DataReadRequest.Builder()
-                .aggregate(dataSource, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .read(DataType.TYPE_WEIGHT)
                 .bucketByTime(1, TimeUnit.DAYS)
                 .enableServerQueries()
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
@@ -70,7 +62,7 @@ class StepActivity : BaseFitnessActivity() {
                 .readData(dataReadRequest)
                 .addOnSuccessListener { response ->
                     var time = System.currentTimeMillis() - start
-                    printValue(response, tvResult, time, "step")
+                    printValueFloat(response, tvResult, time, "weight")
                 }.addOnFailureListener { exception ->
                     Log.e(TAG, Log.getStackTraceString(exception))
                 }
@@ -78,6 +70,3 @@ class StepActivity : BaseFitnessActivity() {
 
 }
 
-enum class Type {
-    MONTH, THREE_MONTH, YEAR
-}
