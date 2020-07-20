@@ -67,9 +67,11 @@ class SleepActivity : BaseFitnessActivity() {
 
         val sessionClient = Fitness.getSessionsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
         val task: Task<SessionReadResponse> = sessionClient.readSession(request)
-
+        val start = Calendar.getInstance().timeInMillis
         task.addOnSuccessListener { response: SessionReadResponse ->
             // Filter the resulting list of sessions to just those that are sleep.
+            val time = Calendar.getInstance().timeInMillis - start
+            tvResult.append("time $time ms \n")
             val sleepSessions = response.sessions
                     .filter { s: Session -> s.activity == FitnessActivities.SLEEP }
             for (session in sleepSessions) {
@@ -95,6 +97,8 @@ class SleepActivity : BaseFitnessActivity() {
                 tvResult.append("\n")
             }
         }.addOnFailureListener { exception ->
+            val time = Calendar.getInstance().timeInMillis - start
+            tvResult.append("time $time ms \n")
             Log.e(TAG, Log.getStackTraceString(exception))
         }
 
