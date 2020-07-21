@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 GoogleSignIn.requestPermissions(
                         this,
                         requestCode.ordinal,
-                        getGoogleAccount(), *TOTAL_SCOPES)
+                        getGoogleAccount(), *Constant.TOTAL_SCOPES)
             }
         }
     }
@@ -175,11 +175,52 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(DataType.TYPE_STEP_COUNT_CUMULATIVE)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.i(TAG, "Successfully subscribed!")
+                        Log.i(TAG, "Successfully subscribed! TYPE_STEP_COUNT_CUMULATIVE")
                     } else {
-                        Log.w(TAG, "There was a problem subscribing.", task.exception)
+                        Log.w(TAG, "There was a problem subscribing. TYPE_STEP_COUNT_CUMULATIVE", task.exception)
                     }
                 }
+
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
+                .subscribe(DataType.TYPE_STEP_COUNT_DELTA)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Successfully subscribed! TYPE_STEP_COUNT_DELTA")
+                    } else {
+                        Log.w(TAG, "There was a problem subscribing TYPE_STEP_COUNT_DELTA.", task.exception)
+                    }
+                }
+
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
+                .subscribe(DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Successfully subscribed! AGGREGATE_STEP_COUNT_DELTA")
+                    } else {
+                        Log.w(TAG, "There was a problem subscribing AGGREGATE_STEP_COUNT_DELTA.", task.exception)
+                    }
+                }
+
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
+                .subscribe(DataType.TYPE_WEIGHT)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Successfully subscribed! TYPE_WEIGHT")
+                    } else {
+                        Log.w(TAG, "There was a problem subscribing TYPE_WEIGHT.", task.exception)
+                    }
+                }
+
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
+                .subscribe(DataType.TYPE_BODY_FAT_PERCENTAGE)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Successfully subscribed! TYPE_BODY_FAT_PERCENTAGE")
+                    } else {
+                        Log.w(TAG, "There was a problem subscribing TYPE_BODY_FAT_PERCENTAGE.", task.exception)
+                    }
+                }
+
     }
 
     /**
@@ -324,11 +365,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-val SCOPE_ACTIVITY_READ_WRITE = Fitness.SCOPE_ACTIVITY_READ_WRITE
-val SCOPE_BODY_READ_WRITE = Fitness.SCOPE_BODY_READ_WRITE
-val USER_PROFILE_SCOPE = Scope("https://www.googleapis.com/auth/userinfo.profile")
-val USER_EMAIL_SCOPE = Scope("https://www.googleapis.com/auth/userinfo.email")
-val TOTAL_SCOPES = arrayOf(
-        SCOPE_ACTIVITY_READ_WRITE, SCOPE_BODY_READ_WRITE, USER_PROFILE_SCOPE, USER_EMAIL_SCOPE
-)

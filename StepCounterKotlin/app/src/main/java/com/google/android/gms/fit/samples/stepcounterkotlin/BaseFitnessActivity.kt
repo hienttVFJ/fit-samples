@@ -1,6 +1,7 @@
 package com.google.android.gms.fit.samples.stepcounterkotlin
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.fitness.result.DataReadResponse
@@ -24,6 +25,7 @@ abstract class BaseFitnessActivity : AppCompatActivity() {
     fun printValue(dataReadResult: DataReadResponse, textView: TextView, time: Long, type: String) {
         textView.text = ""
         textView.append("time $time ms \n")
+        Log.e("buckets",dataReadResult.buckets.toString())
         if (dataReadResult.buckets.size > 0) {
             for (bucket in dataReadResult.buckets) {
                 val date: String = DATE_FORMAT.format(bucket.getStartTime(TimeUnit.MILLISECONDS))

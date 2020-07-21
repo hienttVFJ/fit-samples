@@ -51,7 +51,8 @@ class StepActivity : BaseFitnessActivity() {
         cal[Calendar.SECOND] = 0
         cal[Calendar.MILLISECOND] = 0
         val startTime = cal.timeInMillis
-
+        Log.e(TAG, "startTime $startTime")
+        Log.e(TAG, "endTime $endTime")
         val dataSource = DataSource.Builder()
                 .setAppPackageName("com.google.android.gms")
                 .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
