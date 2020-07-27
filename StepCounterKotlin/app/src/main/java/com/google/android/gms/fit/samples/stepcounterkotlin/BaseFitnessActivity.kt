@@ -50,12 +50,15 @@ abstract class BaseFitnessActivity : AppCompatActivity() {
         if (dataReadResult.buckets.size > 0) {
             for (bucket in dataReadResult.buckets) {
                 val date: String = DATE_FORMAT.format(bucket.getStartTime(TimeUnit.MILLISECONDS))
+                val dateDetail: String = DATE_FORMAT_DETAIL.format(bucket.getStartTime(TimeUnit.MILLISECONDS))
                 val dataSets = bucket.dataSets
                 var weight = 0f
                 for (dataSet in dataSets) {
+                    Log.e("xxx", "dateTime $dateDetail")
                     for (dp in dataSet.dataPoints) {
                         for (field in dp.dataType.fields) {
                             weight = dp.getValue(field).asFloat()
+                            Log.e("xxx", "value $weight")
                         }
                     }
                 }
