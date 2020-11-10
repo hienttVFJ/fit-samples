@@ -78,11 +78,18 @@ class WeightActivity : BaseFitnessActivity() {
         val startTime = cal.timeInMillis
 
         val dataReadRequest = DataReadRequest.Builder()
-                .read(DataType.TYPE_WEIGHT)
+                .aggregate(DataType.TYPE_WEIGHT, DataType.AGGREGATE_WEIGHT_SUMMARY)
                 .bucketByTime(1, TimeUnit.DAYS)
                 .enableServerQueries()
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build()
+
+//        val dataReadRequest = DataReadRequest.Builder()
+//                .read(DataType.TYPE_WEIGHT)
+//                .bucketByTime(1, TimeUnit.DAYS)
+//                .enableServerQueries()
+//                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+//                .build()
         var start = System.currentTimeMillis()
         Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                 .readData(dataReadRequest)

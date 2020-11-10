@@ -29,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.TextViewCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.Scope
 import com.google.android.gms.fit.samples.common.logger.Log
 import com.google.android.gms.fit.samples.common.logger.LogView
 import com.google.android.gms.fit.samples.common.logger.LogWrapper
@@ -212,12 +211,32 @@ class MainActivity : AppCompatActivity() {
                 }
 
         Fitness.getRecordingClient(this, getGoogleAccount()!!)
+                .subscribe(DataType.AGGREGATE_WEIGHT_SUMMARY)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Successfully subscribed! AGGREGATE_WEIGHT_SUMMARY")
+                    } else {
+                        Log.w(TAG, "There was a problem subscribing AGGREGATE_WEIGHT_SUMMARY.", task.exception)
+                    }
+                }
+
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
                 .subscribe(DataType.TYPE_BODY_FAT_PERCENTAGE)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.i(TAG, "Successfully subscribed! TYPE_BODY_FAT_PERCENTAGE")
                     } else {
                         Log.w(TAG, "There was a problem subscribing TYPE_BODY_FAT_PERCENTAGE.", task.exception)
+                    }
+                }
+
+        Fitness.getRecordingClient(this, getGoogleAccount()!!)
+                .subscribe(DataType.AGGREGATE_BODY_FAT_PERCENTAGE_SUMMARY)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Successfully subscribed! AGGREGATE_BODY_FAT_PERCENTAGE_SUMMARY")
+                    } else {
+                        Log.w(TAG, "There was a problem subscribing AGGREGATE_BODY_FAT_PERCENTAGE_SUMMARY.", task.exception)
                     }
                 }
 

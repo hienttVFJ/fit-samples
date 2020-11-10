@@ -114,12 +114,25 @@ class BodyFatActivity : BaseFitnessActivity() {
         cal[Calendar.MILLISECOND] = 0
         val startTime = cal.timeInMillis
 
+        val dataSource = DataSource.Builder()
+                .setDataType(DataType.TYPE_BODY_FAT_PERCENTAGE)
+                .setAppPackageName(this)
+                .setType(DataSource.TYPE_RAW)
+                .build()
+
         val dataReadRequest = DataReadRequest.Builder()
-                .read(DataType.TYPE_BODY_FAT_PERCENTAGE)
+                .read(dataSource)
                 .bucketByTime(1, TimeUnit.DAYS)
                 .enableServerQueries()
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build()
+//
+//        val dataReadRequest = DataReadRequest.Builder()
+//                .read(DataType.TYPE_BODY_FAT_PERCENTAGE)
+//                .bucketByTime(1, TimeUnit.DAYS)
+//                .enableServerQueries()
+//                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+//                .build()
         var start = System.currentTimeMillis()
         Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                 .readData(dataReadRequest)

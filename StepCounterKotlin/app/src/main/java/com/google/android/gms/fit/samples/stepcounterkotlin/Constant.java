@@ -9,9 +9,10 @@ import com.google.android.gms.fitness.Fitness;
 public class Constant {
     public static final Scope SCOPE_ACTIVITY_READ_WRITE = Fitness.SCOPE_ACTIVITY_READ_WRITE;
     public static final Scope SCOPE_BODY_READ_WRITE = Fitness.SCOPE_BODY_READ_WRITE;
+    public static final Scope SCOPE_BODY_READ = Fitness.SCOPE_BODY_READ;
     public static final Scope USER_PROFILE_SCOPE = new Scope("https://www.googleapis.com/auth/userinfo.profile");
     public static final Scope USER_EMAIL_SCOPE = new Scope("https://www.googleapis.com/auth/userinfo.email");
     public static final Scope[] TOTAL_SCOPES = new Scope[]{
-            SCOPE_ACTIVITY_READ_WRITE, SCOPE_BODY_READ_WRITE, USER_PROFILE_SCOPE, USER_EMAIL_SCOPE
+            SCOPE_ACTIVITY_READ_WRITE, SCOPE_BODY_READ, SCOPE_BODY_READ_WRITE, USER_PROFILE_SCOPE, USER_EMAIL_SCOPE
     };
 }
